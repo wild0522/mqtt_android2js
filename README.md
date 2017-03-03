@@ -4,6 +4,7 @@
 - Android client: Paho (http://www.eclipse.org/paho/clients/android/)
 - Javascript client: Paho (http://www.eclipse.org/paho/clients/js/)
 
+![flow](flow.png)
 
 #install broker 
 #### with Docker
@@ -23,7 +24,7 @@ protocol websockets
 restart service
 
 # open demo.html
-![Alt text](web.gif)
+![web](web.gif)
 
 # install apk on your Android device
 [apk/mqtt.apk](apk/mqtt.apk)
