@@ -1,0 +1,82 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Mosquitto Websockets</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+
+    <script type="text/javascript">
+        
+        function conn() {
+            // Create a client instance
+            client = new Paho.MQTT.Client(
+                $('#host').val(),
+                Number($('#port').val()),
+                "cid_" + parseInt(Math.random() * 100, 10)
+            );
+        
+            // set callback handlers
+            client.onConnectionLost = onConnectionLost;
+            client.onMessageArrived = onMessageArrived;
+        
+            // connect the client
+            client.connect({onSuccess:onConnect});
+        }
+
+
+        // called when the client connects
+        function onConnect() {
+            // Once a connection has been made, make a subscription and send a message.
+            console.log("onConnect");
+            client.subscribe("MyTopic/0001");
+            message = new Paho.MQTT.Message("Hello");
+            message.destinationName = "MyTopic/0001";
+            client.send(message);
+        }
+    
+        // called when the client loses its connection
+        function onConnectionLost(responseObject) {
+            if (responseObject.errorCode !== 0) {
+                console.log("onConnectionLost:"+responseObject.errorMessage);
+            }
+        }
+    
+        // called when a message arrives
+        function onMessageArrived(message) {
+            console.log("onMessageArrived:"+message.payloadString);
+            var way = message.payloadString;
+            if($.inArray(way, ['top', 'left', 'right', 'bottom']) !== -1){
+                
+                var plus = ($.inArray(way, ['right', 'bottom']) !== -1) ? 10 : -10;
+                
+                if(way == 'right'){
+                    way = 'left';
+                }
+                if(way == 'bottom'){
+                    way = 'top';
+                }
+    
+                var pos;
+                if(way == 'left'){
+                    pos = $('#box').position().left + plus;
+                }else if(way == 'top'){
+                    pos = $('#box').position().top + plus;
+                }
+                $('#box').css(way, pos);
+            }else{
+                var xy = message.payloadString.split('|');
+                $('#box').css('left', parseInt(xy[0]));
+                $('#box').css('top', parseInt(xy[1]));
+                $('body').append($('#box').clone());
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>Android 2 Js</h1>
+<label>Host:</label><input type="text" id="host" placeholder="localhost"><br />
+<label>Port:</label><input type="text" id="port" placeholder="9001"> (websocket port)<br />
+<button type="button" onclick="conn()">Connect</button>
+<div id="box" style="border-radius: 15px;width:15px;height:15px;background-color:green;position:absolute;top:50%;left:50%;">&nbsp;</div>
+</body>
+</html>
