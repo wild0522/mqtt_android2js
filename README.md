@@ -1,11 +1,11 @@
 # mqtt websocket communication Demo
 
-- Borker: mosquitto (https://mosquitto.org/)
+- Broker: mosquitto (https://mosquitto.org/)
 - Android client: Paho (http://www.eclipse.org/paho/clients/android/)
 - Javascript client: Paho (http://www.eclipse.org/paho/clients/js/)
 
 
-#install borker 
+#install broker 
 #### with Docker
 ```
 $ docker run -d -p 1883:1883 -p 9001:9001 --name=mosquitto sourceperl/mosquitto
@@ -28,3 +28,5 @@ restart service
 # install apk on your Android device
 [apk/mqtt.apk](apk/mqtt.apk)
 
+
+Reference https://www.latech.tw/2017/02/mqtt.html
